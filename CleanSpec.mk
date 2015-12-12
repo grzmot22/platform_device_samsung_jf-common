@@ -79,7 +79,7 @@ $(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltecdma/system/build.pr
 $(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltegsm/system/build.prop)
 $(call add-clean-step, rm -rf $(OUT_DIR)/target/product/jfltecdma/obj/EXECUTABLES/mm-vdec-omx-test*_intermediates)
 $(call add-clean-step, rm -rf $(OUT_DIR)/target/product/jfltegsm/obj/EXECUTABLES/mm-vdec-omx-test*_intermediates)
-$(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltecdma/symbols/system/bin/mm-vdec-omx-test
+$(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltecdma/symbols/system/bin/mm-vdec-omx-test)
 $(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltegsm/symbols/system/bin/mm-vdec-omx-test*)
 $(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltecdma/system/bin/mm-vdec-omx-test*)
 $(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltegsm/system/bin/mm-vdec-omx-test*)
@@ -87,7 +87,7 @@ $(call add-clean-step, rm -rf $(OUT_DIR)/target/product/jfltecdma/obj/EXECUTABLE
 $(call add-clean-step, rm -rf $(OUT_DIR)/target/product/jfltegsm/obj/EXECUTABLES/charger_touch_intermediates)
 $(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltecdma/symbols/system/bin/charger_touch)
 $(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltegsm/symbols/system/bin/charger_touch)
-$(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltecdma/system/bin/charger_touch
+$(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltecdma/system/bin/charger_touch)
 $(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltegsm/system/bin/charger_touch)
 $(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltecdma/obj/NOTICE_FILES/src/system/bin/charger_touch.txt)
 $(call add-clean-step, rm -f $(OUT_DIR)/target/product/jfltegsm/obj/NOTICE_FILES/src/system/bin/charger_touch.txt)
