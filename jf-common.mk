@@ -113,12 +113,10 @@ PRODUCT_PACKAGES += \
     SamsungDoze
 
 # GPS
-PRODUCT_PACKAGES += \
-    gps.msm8960
-
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/gps/etc/gps.conf:/system/etc/gps.conf \
-    $(LOCAL_PATH)/gps/etc/sap.conf:/system/etc/sap.conf
+    $(LOCAL_PATH)/configs/gps.conf:/system/etc/gps.conf \
+    $(LOCAL_PATH)/configs/sap.conf:/system/etc/sap.conf \
+    $(LOCAL_PATH)/configs/izat.conf:/system/etc/izat.conf
 
 # IPv6 tethering
 PRODUCT_PACKAGES += \
@@ -159,6 +157,7 @@ PRODUCT_COPY_FILES += \
 # Media Profile
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
+    $(LOCAL_PATH)/configs/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
     $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
 
 # NFC packages
@@ -191,6 +190,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     power.msm8960
 
+# Qualcomm
+PRODUCT_PACKAGES += \
+    libcnefeatureconfig
+    
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
@@ -211,11 +214,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/thermal-engine.conf:system/etc/thermal-engine.conf \
     $(LOCAL_PATH)/configs/thermal-engine-8064ab.conf:system/etc/thermal-engine-8064ab.conf
 
-# Sony timekeep
+# Stlport
 PRODUCT_PACKAGES += \
-    timekeep \
-    TimeKeep
-
+    libstlport
+    
 # Device specific applications
 PRODUCT_PACKAGES += \
     SamsungServiceMode \
@@ -296,7 +298,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # qualcomm
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.timed.enable=true \
-    ro.vendor.extension_library=/system/lib/libqc-opt.so
+    ro.vendor.extension_library=libqti-perfd-client.so
 
 # ril
 PRODUCT_PROPERTY_OVERRIDES += \

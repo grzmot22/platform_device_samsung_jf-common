@@ -64,11 +64,11 @@ public class jflteRIL extends RIL implements CommandsInterface {
     private Object mSMSLock = new Object();
     private boolean mIsSendingSMS = false;
     protected boolean isGSM = false;
+    private static final int RIL_REQUEST_DIAL_EMERGENCY = 10001;
     public static final long SEND_SMS_TIMEOUT_IN_MS = 30000;
-    private boolean samsungEmergency = needsOldRilFeature("samsungEMSReq");
 
-    public jflteRIL(Context context, int preferredNetworkType, int cdmaSubscription) {
-        this(context, preferredNetworkType, cdmaSubscription, null);
+    public jflteRIL(Context context, int networkModes, int cdmaSubscription) {
+        this(context, networkModes, cdmaSubscription, null);
         mAudioManager = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
     }
 
@@ -216,7 +216,6 @@ public class jflteRIL extends RIL implements CommandsInterface {
     protected Object
     responseCallList(Parcel p) {
         int num;
-        int voiceSettings;
         ArrayList<DriverCall> response;
         DriverCall dc;
 
@@ -232,24 +231,26 @@ public class jflteRIL extends RIL implements CommandsInterface {
             dc = new DriverCall();
 
             dc.state = DriverCall.stateFromCLCC(p.readInt());
-            dc.index = p.readInt() & 0xff;
+            dc.index = p.readInt();
             dc.TOA = p.readInt();
             dc.isMpty = (0 != p.readInt());
             dc.isMT = (0 != p.readInt());
             dc.als = p.readInt();
-            voiceSettings = p.readInt();
-            dc.isVoice = (0 == voiceSettings) ? false : true;
+            dc.isVoice = (0 != p.readInt());
+            if (!isGSM) {
+                p.readInt();
+                p.readInt();
+                p.readString();
+            }
             dc.isVoicePrivacy = (0 != p.readInt());
-            p.readInt();
-            p.readInt();
-            p.readString();
             dc.number = p.readString();
-            int np = p.readInt();
-            dc.numberPresentation = DriverCall.presentationFromCLIP(np);
+            dc.numberPresentation = DriverCall.presentationFromCLIP(p.readInt());
             dc.name = p.readString();
-            dc.namePresentation = p.readInt();
-            int uusInfoPresent = p.readInt();
-            if (uusInfoPresent == 1) {
+            if (isGSM)
+                dc.namePresentation = DriverCall.presentationFromCLIP(p.readInt());
+            else
+                dc.namePresentation = p.readInt();
+            if (p.readInt() == 1) { // uusInfoPresent
                 dc.uusInfo = new UUSInfo();
                 dc.uusInfo.setType(p.readInt());
                 dc.uusInfo.setDcs(p.readInt());
@@ -552,7 +553,7 @@ public class jflteRIL extends RIL implements CommandsInterface {
     @Override
     public void
     dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
-        if (samsungEmergency && PhoneNumberUtils.isEmergencyNumber(address)) {
+        if (PhoneNumberUtils.isEmergencyNumber(address)) {
             dialEmergencyCall(address, clirMode, result);
             return;
         }
@@ -624,7 +625,6 @@ public class jflteRIL extends RIL implements CommandsInterface {
         }
     }
 
-    static final int RIL_REQUEST_DIAL_EMERGENCY = 10016;
    private void
     dialEmergencyCall(String address, int clirMode, Message result) {
         RILRequest rr;
@@ -661,5 +661,23 @@ public class jflteRIL extends RIL implements CommandsInterface {
             AsyncResult.forMessage(response, ret, null);
             response.sendToTarget();
         }
+    }
+
+    protected Object
+    responseFailCause(Parcel p) {
+        int numInts;
+        int response[];
+
+        numInts = p.readInt();
+        response = new int[numInts];
+        for (int i = 0 ; i < numInts ; i++) {
+            response[i] = p.readInt();
+        }
+        LastCallFailCause failCause = new LastCallFailCause();
+        failCause.causeCode = response[0];
+        if (p.dataAvail() > 0) {
+          failCause.vendorCause = p.readString();
+        }
+        return failCause;
     }
 }

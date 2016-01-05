@@ -286,9 +286,9 @@ service thermal-engine /system/bin/thermal-engine
     group root
 
 service mpdecision /system/bin/mpdecision --avg_comp
+    class late_start
     user root
-    group root system
-    disabled
+    group system
 
 service kickstart /system/bin/qcks -i /firmware-mdm/image/
     user root
@@ -315,11 +315,10 @@ on property:ro.baseband=sglte
     mkdir /data/misc/mdmhelperdata 0700
     start mdm_helper
 
-service timekeep /system/bin/timekeep restore
+service time_daemon /system/bin/time_daemon
     class late_start
     user root
     group root
-    oneshot
 
 # LEDify
 service ledify /system/bin/ledify
